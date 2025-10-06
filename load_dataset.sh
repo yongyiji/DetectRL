@@ -1,8 +1,8 @@
-original_datasets_dir=
+original_datasets_dir=/home/y/yz741/DRL/DetectRL/Benchmark/Original_Dataset
 
 cd $original_datasets_dir
 
-python get_arxiv_data.py
+#python get_arxiv_data.py
 python get_xsum_data.py
 python get_writing_prompt_data.py
 python get_yelp_review_data.py

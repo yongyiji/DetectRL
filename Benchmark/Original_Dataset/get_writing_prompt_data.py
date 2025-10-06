@@ -2,6 +2,7 @@ import json
 import re
 import nltk
 from tqdm import tqdm
+import kagglehub
 
 
 def clean_text(text):
@@ -19,7 +20,7 @@ def clean_text(text):
     text = re.sub(r"''", r'"', text)
     return text
 
-
+kagglehub.dataset_download("ratthachat/writing-prompts")
 devide = ["train", "test", "valid"]
 data = []
 for name in devide:

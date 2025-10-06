@@ -10,7 +10,7 @@ def clean_text(text):
     return text
 
 
-dataset = load_dataset('xsum')
+dataset = load_dataset('EdinburghNLP/xsum')
 
 train_dataset = dataset['train']
 eval_dataset = dataset['validation']

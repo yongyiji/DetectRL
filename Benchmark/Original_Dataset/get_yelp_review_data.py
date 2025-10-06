@@ -4,7 +4,7 @@ import nltk
 from tqdm import tqdm
 from datasets import load_dataset
 
-dataset = load_dataset('yelp_review_full')
+dataset = load_dataset('yelp/yelp_review_full')
 
 
 def count_sentences_in_paragraph(paragraph):

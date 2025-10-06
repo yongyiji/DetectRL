@@ -18,6 +18,10 @@ def clean_text(text):
 
 
 def count_sentences_in_paragraph(paragraph):
+    try:
+        nltk.data.find('tokenizers/punkt_tab')
+    except LookupError:
+        nltk.download('punkt_tab')
     sentences = nltk.sent_tokenize(paragraph)
     return len(sentences)
 
@@ -33,30 +37,31 @@ def clean_text(text):
     return text
 
 
-# arxiv_papers = read_jsonl("arxiv_papers.json")
-#
-# data = []
-# length = []
-# sentence_num = []
-# arxiv_papers = arxiv_papers
-# num = 0
-# for article in tqdm(arxiv_papers):
-#     if len(data) < 100000:
-#         if len(article['abstract']) > 800 and len(article['abstract']) < 2000:
-#             if count_sentences_in_paragraph(article['abstract']) >= 4:
-#                 data.append({
-#                     'id': clean_text(article['id']),
-#                     'title': clean_text(article['title']),
-#                     'abstract': clean_text(article['abstract']),
-#                 })
-#                 num += 1
-#                 print(num)
-#                 length.append(len(article['abstract']))
-#                 sentence_num.append(count_sentences_in_paragraph(article['abstract']))
-#     else:
-#         break
-# with open('arxiv_all.json', 'w', encoding='utf-8') as f:
-#     json.dump(data, f, ensure_ascii=False, indent=4)
+arxiv_papers = read_jsonl("arxiv_papers.json")
+
+data = []
+length = []
+sentence_num = []
+arxiv_papers = arxiv_papers
+num = 0
+for article in tqdm(arxiv_papers):
+    if len(data) < 100000:
+        if len(article['abstract']) > 800 and len(article['abstract']) < 2000:
+            if count_sentences_in_paragraph(article['abstract']) >= 4:
+                data.append({
+                    'id': clean_text(article['id']),
+                    'title': clean_text(article['title']),
+                    'abstract': clean_text(article['abstract']),
+                })
+                num += 1
+                print(num)
+                length.append(len(article['abstract']))
+                sentence_num.append(count_sentences_in_paragraph(article['abstract']))
+    else:
+        break
+
+with open('arxiv_all.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=4)
 
 with open('arxiv_all.json', 'r', encoding='utf-8') as f:
     data = json.load(f)

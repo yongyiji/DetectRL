@@ -315,8 +315,10 @@ def run(args):
                 if args.method == "prompt_few_shot":
                     # direct prompt is the base for prompt_few_shot
                     if args.method in article.keys() and article[args.method] != "":
+                        assert False, '==================='
                         pass
                     else:
+                        assert False, '==================='
                         try:
                             icl_examples = []
                             tokenized_query = human.split(" ")
