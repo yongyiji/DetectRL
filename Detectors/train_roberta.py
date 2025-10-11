@@ -54,7 +54,7 @@ def eval_experiment(args, model_path, test_data_path, optimal_threshold=None):
         predictions['llm'] = [-i for i in predictions['llm'] if np.isfinite(i)]
 
         if optimal_threshold is None:
-            roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy = get_roc_metrics(
+            roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy, tpr_at_fpr_0_01 = get_roc_metrics(
                 predictions['human'],
                 predictions['llm'])
 
@@ -128,10 +128,10 @@ def compute_metrics(eval_pred):
                                                                average='micro')
     acc = accuracy_score(labels, preds)
     return {
-        'accuracy': acc.item(),
-        'f1': f1.item(),
-        'precision': precision.item(),
-        'recall': recall.item()
+        'accuracy': acc,
+        'f1': f1,
+        'precision': precision,
+        'recall': recall
     }
 
 
@@ -221,7 +221,7 @@ def run(args):
             save_total_limit=1,
             do_train=True,
             do_eval=True,
-            evaluation_strategy="epoch",
+            # evaluation_strategy="epoch",
         )
 
         # Initialize Trainer

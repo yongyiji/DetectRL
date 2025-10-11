@@ -1,9 +1,9 @@
-Detectors_path=
+Detectors_path=Detectors/
 
-Task1_path=
-Task2_path=
+Task1_path=Benchmark/Tasks/Task1
+Task2_path=Benchmark/Tasks/Task2
 
-cd Benchmark\Benchmark
+# cd Benchmark\Benchmark
 
 # Task1
 python $Detectors_path/likelihood_evaluation.py --test_data_path $Task1_path/direct_prompt_test.json,Task1_path/prompt_attacks_test.json,Task1_path/paraphrase_attacks_test.json,Task1_path/perturbation_attacks_test.json,Task1_path/data_mixing_test.json,

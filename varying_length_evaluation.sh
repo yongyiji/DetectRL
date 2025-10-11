@@ -1,7 +1,8 @@
-Detectors_path=
+Detectors_path=Detectors/
 
-Task3_path=
-cd Benchmark\Benchmark\Varying_Length
+Task3_path=Benchmark/Tasks/Task3
+
+# cd Benchmark\Benchmark\Varying_Length
 
 # zero-shot transfer
 python $Detectors_path/zero_shot_transfer_evaluation.py --method likelihood,entropy,rank,logRank,LRR,NPR,DetectGPT,Fast_DetectGPT --test_data_path $Task3_path/cross_length_20_test.json, --transfer_data_path $Task3_path/cross_length_180_test.json,

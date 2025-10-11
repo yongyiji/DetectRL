@@ -182,7 +182,20 @@ def run(args):
         word_character_augmenter = TextBuggerAugmenter()
 
     if args.method == "paraphrase_back_translation":
-        browser = webdriver.Chrome('chromedriver.exe')  # 打开浏览器
+        from selenium.webdriver.chrome.service import Service
+        from selenium.webdriver.chrome.options import Options 
+
+        chrome_path = '/home/y/yz741/bin/chrome/opt/google/chrome/google-chrome' 
+        driver_path = '/home/y/yz741/bin/chrome-linux64/chrome' 
+
+        options = Options() 
+        options.binary_location = chrome_path 
+        options.add_argument('--no-sandbox') 
+        options.add_argument('--disable-dev-shm-usage') 
+        options.add_argument('--headless') # 如果是服务器无图形界面环境 
+
+        service = Service(driver_path) 
+        browser = webdriver.Chrome(service=service, options=options)
         time.sleep(10)
 
     # domain selection

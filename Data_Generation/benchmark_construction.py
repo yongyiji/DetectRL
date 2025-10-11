@@ -6,7 +6,7 @@ import random
 import re
 import nltk
 from tqdm import tqdm
-from data_mixing import get_llm_mixing, get_human_mixing, get_human_centered_mixing, get_llm_centered_mixing
+from data_mixing import get_llm_mixed, get_human_mixed, get_human_centered_mixed, get_llm_centered_mixed
 
 
 def read_data(json_path):
@@ -152,7 +152,19 @@ def extract_train_test(data, human_keys, llm_keys, llm_types, llm_test_num):
     train_llm = []
     test_llm = []
     for key, items in grouped_llm_data.items():
-        sampled_indices = random.sample(range(len(items)), math.ceil(llm_test_num / (len(llm_keys) * len(llm_types))))
+
+        # 计算理论需要的样本数 
+        required_per_category = math.ceil(llm_test_num / (len(llm_keys) * len(llm_types))) 
+        # 实际可用的样本数（不能超过总数据量） 
+        actual_sample_size = min(required_per_category, len(items)) 
+        if actual_sample_size == 0: 
+            print("错误: 没有可用的数据用于抽样") 
+            return [], [] 
+        if actual_sample_size < required_per_category: 
+            print(f"警告: 数据不足。请求每类{required_per_category}个，但只有{len(items)}个可用") 
+        
+        sampled_indices = random.sample(range(len(items)), actual_sample_size) 
+
         sampled_llm = [items[i] for i in sampled_indices]
         sampled_indices.sort(reverse=True)
         for index in sampled_indices:

@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 def experiment(args):
 
     final_result = {}
-    for method in args.methods:
+    for method in [args.methods]:
         logging.info(f"Testing method {method}")
 
         score_key = {
@@ -25,9 +25,8 @@ def experiment(args):
         }
 
         result_path = args.test_data_path.split(".json")[0] + f"_{method}_result.json"
-
+        result_path = result_path.replace('Task2', 'Task1')
         logging.info(f"Loading result from {result_path}")
-
         with open(result_path, "r") as f:
             result_data = json.load(f)
             if method in ["NPR", "DetectGPT"]:
@@ -40,6 +39,12 @@ def experiment(args):
         for filename in filenames:
             logging.info(f"Test in {filename}")
             data_path = filename.split(".json")[0] + f"_{method}_data.json"
+            # print('+++++++++++++++++/n',data_path)
+            # if 'Benchmark' not in data_path:
+            #     data_path = 'Benchmark/Tasks/Task1/'+data_path
+            # else:
+            #     data_path = data_path.replace('Task2', 'Task1')
+            # print('+++++++++++++++++/n',data_path)
             logging.info(f"Test in {data_path}")
             test_data = json.load(open(data_path, "r"))
 
@@ -108,7 +113,7 @@ if __name__ == '__main__':
     parser.add_argument('--transfer_data_path', type=str, required=True,
                         help="Path to the test data. could be several files with ','. "
                              "Note that the data should have been perturbed.")
-    parser.add_argument('--methods', default=["likelihood", "entropy", "rank", "logRank", "LRR", "NPR", "DetectGPT", "Fast_DetectGPT"], type=list, required=False)
+    parser.add_argument('--methods', default=["likelihood", "entropy", "rank", "logRank", "LRR", "NPR", "DetectGPT", "Fast_DetectGPT"], required=False)
     parser.add_argument('--DEVICE', default="cuda", type=str, required=False)
     parser.add_argument('--seed', default=2023, type=int, required=False)
     args = parser.parse_args()

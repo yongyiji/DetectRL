@@ -5,13 +5,13 @@ Data_Generation_path=Data_Generation
 
 # GPT-3.5-turbo
 python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method direct_prompt
-python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method prompt_few_shot
+# python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method prompt_few_shot
 python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method prompt_ICO
 python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method perturbation_character
 python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method perturbation_word
-# python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method perturbation_sent
+python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method perturbation_sent
 # python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method paraphrase_back_translation
-# python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method paraphrase_polish
+python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/arxiv_2800.json --output_path $Data_path/arxiv_2800.json --method paraphrase_polish
 
 # python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/xsum_2800.json --output_path $Data_path/xsum_2800.json --method direct_prompt
 # python $Data_Generation_path/data_generation.py --llm_types ChatGPT --input_path $Data_path/xsum_2800.json --output_path $Data_path/xsum_2800.json --method prompt_few_shot

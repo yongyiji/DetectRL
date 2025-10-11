@@ -1,8 +1,8 @@
-Detectors_path=
+Detectors_path=Detectors/
 
-Task4_path=
+Task4_path=Benchmark/Tasks/Task4
 
-cd Benchmark\Benchmark
+# cd Benchmark\Benchmark
 
 python $Detectors_path/likelihood_evaluation.py --test_data_path Task4_path/paraphrase_attacks_test.json,Task4_path/perturbation_attacks_test.json,Task4_path/data_mixing_test.json,
 python $Detectors_path/rank_evaluation.py --test_data_path Task4_path/paraphrase_attacks_test.json,Task4_path/perturbation_attacks_test.json,Task4_path/data_mixing_test.json,
