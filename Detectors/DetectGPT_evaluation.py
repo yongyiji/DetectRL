@@ -90,7 +90,7 @@ def experiment(args):
             predictions['human'] = [i for i in predictions['human'] if np.isfinite(i)]
             predictions['llm'] = [i for i in predictions['llm'] if np.isfinite(i)]
 
-            roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy = get_roc_metrics(
+            roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy, tpr_at_fpr_0_01 = get_roc_metrics(
                 predictions['human'], predictions['llm'])
 
             result = {

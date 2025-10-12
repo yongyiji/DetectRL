@@ -110,7 +110,7 @@ def experiment(args):
 
         bartscorer.model.to('cpu')
 
-        roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy = get_roc_metrics(predictions['human'],
+        roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy, tpr_at_fpr_0_01 = get_roc_metrics(predictions['human'],
                                                                                                    predictions['llm'])
 
         result = {

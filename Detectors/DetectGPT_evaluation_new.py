@@ -9,7 +9,7 @@ import argparse
 import json
 from DetectGPT import perturb_texts
 from loss import get_ll, get_lls
-from metrics import get_roc_metrics,get_roc_by_threshold
+from metrics import get_roc_metrics
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForSeq2SeqLM
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -168,7 +168,7 @@ def experiment(args):
         predictions['human'] = [i for i in predictions['human'] if np.isfinite(i)]
         predictions['llm'] = [i for i in predictions['llm'] if np.isfinite(i)]
 
-        roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy, tpr_at_fpr_0_01 = get_roc_by_threshold(
+        roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy, tpr_at_fpr_0_01 = get_roc_metrics(
             predictions['human'], predictions['llm'],threshold=optimal_threshold)
 
         result = {

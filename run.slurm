@@ -29,25 +29,26 @@ module load GCCcore/13.3.0 Python/3.12.3
 module load cuDNN/8.7.0.84-CUDA-11.8.0 
 
 #Activate environment 
-source ../venv/bin/activate  
+# source ../venv/bin/activate  
 
-#pip install --upgrade pip  
-#pip install datasets==1.18.4 pyarrow==15.0.0 'fsspec<2023.12.0' nltk kagglehub torch rank_bm25 selenium openai google
-#pip install --upgrade google-api-python-client 
-#pip install -q -U google-generativeai 
-#pip install anthropic textattack
-#pip install --upgrade transformers
+pip install --upgrade pip  
+pip install datasets==1.18.4 pyarrow==15.0.0 'fsspec<2023.12.0' nltk kagglehub torch rank_bm25 selenium openai google
+pip install --upgrade google-api-python-client 
+pip install -q -U google-generativeai 
+pip install anthropic textattack
+pip install --upgrade transformers
 #sh data_generation.sh
 
-#cd /home/y/yz741/DRL/DetectRL/Benchmark/Original_Dataset
-#python ../../Data_Generation/benchmark_construction.py 
 
 case $1 in
 	0)
  		echo 'running, Task' $(($1+1)) 'and' $(($1+2))
 		# Task1 and Task2 evaluation
+		echo 'starting domains_evaluation.sh'
 		sh domains_evaluation.sh
+		echo 'starting llms_evaluation.sh'
 		sh llms_evaluation.sh
+		echo 'starting attacks_evaluation.sh'
 		sh attacks_evaluation.sh
 		;;
 	1)

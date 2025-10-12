@@ -90,20 +90,21 @@ def perturb_texts_(texts, args, model_config, ceil_pct=False):
     perturbed_texts = apply_extracted_fills(masked_texts, extracted_fills)
 
     # Handle the fact that sometimes the model doesn't generate the right number of fills and we have to try again
-    attempts = 1
-    while '' in perturbed_texts:
-        idxs = [idx for idx, x in enumerate(perturbed_texts) if x == '']
-        print(f'WARNING: {len(idxs)} texts have no fills. Trying again [attempt {attempts}].')
-        masked_texts = [tokenize_and_mask(x, args, span_length, pct, ceil_pct) for idx, x in enumerate(texts) if
-                        idx in idxs]
-        raw_fills = replace_masks(masked_texts, model_config, args)
-        extracted_fills = extract_fills(raw_fills)
-        new_perturbed_texts = apply_extracted_fills(masked_texts, extracted_fills)
-        for idx, x in zip(idxs, new_perturbed_texts):
-            perturbed_texts[idx] = x
-        attempts += 1
-        if attempts > 10:
-            break
+    # attempts = 1
+    # print('+++++++++++++++++++++++++++\n', perturbed_texts)
+    # while '' in perturbed_texts:
+    #     idxs = [idx for idx, x in enumerate(perturbed_texts) if x == '']
+    #     print(f'WARNING: {len(idxs)} texts have no fills. Trying again [attempt {attempts}].')
+    #     masked_texts = [tokenize_and_mask(x, args, span_length, pct, ceil_pct) for idx, x in enumerate(texts) if
+    #                     idx in idxs]
+    #     raw_fills = replace_masks(masked_texts, model_config, args)
+    #     extracted_fills = extract_fills(raw_fills)
+    #     new_perturbed_texts = apply_extracted_fills(masked_texts, extracted_fills)
+    #     for idx, x in zip(idxs, new_perturbed_texts):
+    #         perturbed_texts[idx] = x
+    #     attempts += 1
+    #     if attempts > 10:
+    #         break
 
     return perturbed_texts
 
