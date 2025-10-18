@@ -23,7 +23,7 @@ def experiment(args):
         np.random.seed(args.seed)
 
         for item in tqdm.tqdm(test_data):
-            text = item["text"]
+            text = item.get('text')
 
             if not text:  # 如果 text 为空或缺失
                 text = item["comments"]

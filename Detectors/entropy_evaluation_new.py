@@ -29,10 +29,10 @@ def experiment(args):
         np.random.seed(args.seed)
 
         for item in tqdm.tqdm(data):
-            text = item["text"]
+            text = item.get("text")
             if not text:  # 如果 text 为空或缺失
                 text = item["comments"]
-            item["entropy"] = get_entropy(text, args, base_tokenizer, base_model)
+            item["entropy"] = get_entropy(text, args, base_tokenizer, base_model, max_tokens=2048)
 
         # Filter out non-finite entropies
         for item in data:

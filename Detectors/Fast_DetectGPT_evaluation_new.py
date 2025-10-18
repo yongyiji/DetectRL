@@ -86,7 +86,7 @@ def experiment(args):
 
         results = []
         for item in tqdm(test_data):
-            text = item["text"]
+            text = item.get("text")
             if not text:  # 如果 text 为空或缺失
                 text = item["comments"]
             text_crit = get_text_crit(text, args, model_config)

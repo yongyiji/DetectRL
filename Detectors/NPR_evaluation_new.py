@@ -68,18 +68,21 @@ def experiment(args):
         mask_model.eval()
         mask_model.cuda()
         for item in tqdm.tqdm(test_data, desc="Perturbing texts"):
-            logging.info(f"Processing text (length {len(item['text'])}): {item['text'][:100]}...")
+            text = item.get("text")
+            if not text:  # if text is None or empty string
+                text = item.get("comments")  # safely get comments
+            # logging.info(f"Processing text (length {len(text)}): {text}...")
             try:
                 # Check token length and truncate if necessary
-                inputs = mask_tokenizer(item["text"], return_tensors="pt", truncation=False)
+                inputs = mask_tokenizer(text, return_tensors="pt", truncation=False)
                 token_length = len(inputs.input_ids[0])
                 logging.info(f"Token length: {token_length}")
-                text_to_perturb = item["text"]
+                text_to_perturb = text
                 if token_length > 512:
                     logging.info(f"Text exceeds 512 tokens, truncating to 512 tokens...")
-                    inputs = mask_tokenizer(item["text"], max_length=512, truncation=True, return_tensors="pt")
+                    inputs = mask_tokenizer(text, max_length=512, truncation=True, return_tensors="pt")
                     text_to_perturb = mask_tokenizer.decode(inputs.input_ids[0], skip_special_tokens=True)
-                    logging.info(f"Truncated text (length {len(text_to_perturb)}): {text_to_perturb[:100]}...")
+                    # logging.info(f"Truncated text (length {len(text_to_perturb)}): {text_to_perturb}...")
 
                 perturbed_text = perturb_fn([text_to_perturb for _ in range(max(args.n_perturbation_list))])
                 logging.info(f"Perturbed texts (first 2): {perturbed_text[:2]}")
@@ -87,7 +90,7 @@ def experiment(args):
                     args.n_perturbation_list), f"Expected {max(args.n_perturbation_list)} perturbed samples, got {len(perturbed_text)}"
                 item["perturbed_text"] = perturbed_text
             except Exception as e:
-                logging.error(f"Failed to perturb text {item['text'][:100]}: {str(e)}")
+                logging.error(f"Failed to perturb text {item['text']}: {str(e)}")
                 item["perturbed_text"] = [None for _ in range(max(args.n_perturbation_list))]
         mask_model.to("cpu")
 
@@ -95,7 +98,9 @@ def experiment(args):
         base_model.eval()
         base_model.cuda()
         for item in tqdm.tqdm(test_data, desc="Computing ranks and NPR"):
-            text = item["text"]
+            text = item.get("text")
+            if not text:  # if text is None or empty string
+                text = item.get("comments")  # safely get comments
             try:
                 item["text_logrank"] = get_rank(text, args, base_tokenizer, base_model)
                 logging.info(f"Text logrank: {item['text_logrank']}")
@@ -112,9 +117,9 @@ def experiment(args):
                         logging.info(f"NPR_{n_perturbation}: {item[f'npr_{n_perturbation}']}")
                     else:
                         item[f"npr_{n_perturbation}"] = None
-                        logging.warning(f"Could not compute NPR_{n_perturbation} for text {text[:100]}")
+                        logging.warning(f"Could not compute NPR_{n_perturbation} for text {text}")
             except Exception as e:
-                logging.error(f"Failed to rank text {text[:100]}: {str(e)}")
+                logging.error(f"Failed to rank text {text}: {str(e)}")
                 item["text_logrank"] = None
                 item["perturbed_text_logrank"] = [None for _ in range(max(args.n_perturbation_list))]
                 for n_perturbation in args.n_perturbation_list:

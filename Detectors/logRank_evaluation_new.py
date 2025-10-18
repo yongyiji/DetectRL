@@ -17,15 +17,37 @@ def experiment(args):
     base_model.eval()
     base_model.cuda()
 
+    max_length = 2048
+
     filenames = args.test_data_path.split(",")
     for filename in filenames:
         logging.info(f"Processing {filename}")
         data = json.load(open(filename, "r"))
 
-        for item in tqdm.tqdm(data):
-            text = item["text"]
+        for i, item in enumerate(tqdm.tqdm(data)):
+            text = item.get("text")
             if not text:  # 如果 text 为空或缺失
                 text = item["comments"]
+                
+            
+            try:
+                # 编码文本以检查 token 长度（不截断）
+                inputs = base_tokenizer(text, return_tensors="pt")
+                token_length = inputs["input_ids"].size(1)
+                # logging.info(f"Processing item {i}, token length: {token_length}")
+
+                # 如果 token 长度超过 max_length，进行截断
+                if token_length > max_length:
+                    # logging.warning(f"Item {i} token length {token_length} exceeds max_length {max_length}, truncating...")
+                    inputs = base_tokenizer(text, max_length=max_length, truncation=True, return_tensors="pt")
+                    text = base_tokenizer.decode(inputs["input_ids"][0], skip_special_tokens=True)
+            except Exception as e:
+                logging.error(f"Error tokenizing item {i}: {text[0]}... | Error: {str(e)}")
+                item["text_logrank"] = 0.0
+                continue
+
+            # inputs = base_tokenizer(text, max_length=max_length, truncation=True, return_tensors="pt")
+            # truncated_text = base_tokenizer.decode(inputs["input_ids"][0], skip_special_tokens=True)
 
             item["text_logrank"] = -get_rank(text, args, base_tokenizer, base_model, log=True)
 
