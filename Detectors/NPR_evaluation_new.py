@@ -10,6 +10,7 @@ import json
 from DetectGPT import perturb_texts
 from rank import get_rank, get_ranks
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForSeq2SeqLM
+import re
 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,6 +20,15 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
+
+def clean_text(text):
+    """清洗文本，处理特殊字符"""
+    if not text:
+        return ""
+    # 移除可能引起问题的特殊字符
+    text = re.sub(r'[^\x00-\x7F]+', ' ', text)  # 移除非ASCII字符
+    return text.strip()
 
 def experiment(args):
     logging.info(f"Loading base model of type {args.base_model}...")
@@ -50,13 +60,12 @@ def experiment(args):
         for item in test_data:
         # 优先使用 text，没有就用 comments
             text = item.get("text")
-            if not text or not isinstance(text, str) or not text.strip():
+            if not text:
                 text = item.get("comments")
-                if not text or (isinstance(text, str) and not text.strip()):
-                    logging.warning(
-                        f"Invalid text/comments in item {item.get('global_id', 'None')}: "
-                        f"text={item.get('text', 'None')}, comments={item.get('comments', 'None')}"
-                    )
+            
+            if text:
+                text = clean_text(text)
+                
 
         random.seed(args.seed)
         torch.manual_seed(args.seed)
@@ -90,7 +99,7 @@ def experiment(args):
                     args.n_perturbation_list), f"Expected {max(args.n_perturbation_list)} perturbed samples, got {len(perturbed_text)}"
                 item["perturbed_text"] = perturbed_text
             except Exception as e:
-                logging.error(f"Failed to perturb text {item['text']}: {str(e)}")
+                logging.error(f"Failed to perturb text {text}: {str(e)}")
                 item["perturbed_text"] = [None for _ in range(max(args.n_perturbation_list))]
         mask_model.to("cpu")
 
