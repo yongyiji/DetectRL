@@ -86,7 +86,8 @@ def experiment(args):
             "f1": f1,
             "accuracy": accuracy
         }
-
+        print('likelihood')
+        print(filenames)
         logging.info(f"{result}")
         with open(filename.split(".json")[0] + "_likelihood_data.json", "w") as f:
             json.dump(test_data, f, indent=4)

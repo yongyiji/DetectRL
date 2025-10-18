@@ -71,7 +71,7 @@ def experiment(args):
     for filename in filenames:
         logging.info(f"Test in {filename}")
         test_data = json.load(open(filename, "r"))
-
+        # test_data = test_data[:10]
         random.seed(args.seed)
         torch.manual_seed(args.seed)
         np.random.seed(args.seed)
@@ -94,9 +94,8 @@ def experiment(args):
         predictions['human'] = [i for i in predictions['human'] if np.isfinite(i)]
         predictions['llm'] = [i for i in predictions['llm'] if np.isfinite(i)]
 
-        roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy, tpr_at_fpr_0_01 = get_roc_metrics(predictions['human'],
+        roc_auc, optimal_threshold, conf_matrix, precision, recall, f1, accuracy = get_roc_metrics(predictions['human'],
                                                                                                    predictions['llm'])
-
         result = {
             "roc_auc": roc_auc,
             "optimal_threshold": optimal_threshold,
@@ -106,7 +105,8 @@ def experiment(args):
             "f1": f1,
             "accuracy": accuracy
         }
-
+        print('fast_detet')
+        print(filenames)
         logging.info(f"{result}")
         with open(filename.split(".json")[0] + "_Fast_DetectGPT_data.json", "w") as f:
             json.dump(test_data, f, indent=4)
